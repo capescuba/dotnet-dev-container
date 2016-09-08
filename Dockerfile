@@ -14,3 +14,7 @@ ENV STACKSMITH_STACK_ID="6ea9876" \
     STACKSMITH_STACK_PRIVATE="1"
 
 ## STACKSMITH-END: Modifications below this line will be unchanged when regenerating
+
+## Add the dotnet core
+FROM microsoft/dotnet
+
