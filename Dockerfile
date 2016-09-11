@@ -18,3 +18,11 @@ ENV STACKSMITH_STACK_ID="6ea9876" \
 ## Add the dotnet core
 FROM microsoft/dotnet
 
+COPY . /dotnetapp
+WORKDIR /dotnetapp
+
+COPY ./dotnet-entrypoint.sh /
+ENTRYPOINT ["/dotnet-entrypoint.sh"]
+
+EXPOSE 5000/tcp
+ENV ASPNETCORE_URLS http://*:5000

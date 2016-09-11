@@ -1,17 +1,12 @@
 version: '2'
 
 services:
-  mongodb:
-    image: bitnami/mongodb:3.2.7-r2
-
-  myapp:
-    tty: true # Enables debugging capabilities when attached to this container.
-    image: bitnami/express:4.14.0-r1
+  dotnetapp:
+    image: capescuba/dotnet:v1.0.0
     environment:
-      - DATABASE_URL=mongodb://mongodb:27017/my_app_development
-    depends_on:
-      - mongodb
+          - GITHUB_USER=capescuba
+          - APP_NAME=dotnetapp
     ports:
-      - 3000:3000
+      - 5000:5000
     volumes:
-      - .:/dotnetapp
+      - ./dotnetapp:/dotnetapp

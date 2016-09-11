@@ -1,22 +1,12 @@
 [![Docker Hub Automated Build](http://container.checkforupdates.com/badges/bitnami/express)](https://hub.docker.com/r/bitnami/express/)
 
-# Express Application Development using Bitnami Docker Images
+# Microsoft ASP.Net development using Bitnami Docker Images
 
-We increasingly see developers adopting two strategies for development. Using a so called “micro services” architecture and using containers for development. At Bitnami, we have developed tools and assets that dramatically lowers the overhead for developing with this approach.
+We increasingly see developers adopting two strategies for development. Using a so called “micro services” architecture and using containers for development. At Bitnami, we have developed tools and assets that dramatically lower the overhead for developing with this approach.
 
 If you’ve never tried to start a project with containers before, or you have tried it and found the advice, tools, and documentation to be chaotic, out of date, or wrong, then this tutorial may be for you.
 
-In this tutorial we walk you through using the Bitnami docker images during the development lifecycle of an Express application.
-
-### Eclipse Che Developer Workspace
-
-You can download this repository locally to your computer to start working with the tutorial or just click the link below to automatically create and launch an Express on-demand Eclipse Che developer workspace on Codenvy:
-
-[![Contribute](http://beta.codenvy.com/factory/resources/codenvy-contribute.svg)](https://beta.codenvy.com/f/?url=https%3A%2F%2Fgithub.com%2Fbitnami%2Fbitnami-docker-express%2Ftree%2Fche-4.14.0-r1)
-
-You can find the configuation files used on the previous link in the [Che branch](https://github.com/bitnami/bitnami-docker-express/tree/che). For more information about Eclipse Che workspaces check the [official documentation](https://eclipse-che.readme.io/docs/introduction)
-
-If you want to start developing locally skip this step and follow the documentation below.
+In this tutorial we walk you through using the Bitnami docker images during the development lifecycle of a Microsoft.Net Application.
 
 # Why Docker?
 
