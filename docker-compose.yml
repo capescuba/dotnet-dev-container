@@ -3,9 +3,6 @@ version: '2'
 services:
   dotnetapp:
     image: capescuba/dotnet:v1.0.0
-    environment:
-          - GITHUB_USER=capescuba
-          - APP_NAME=dotnetapp
     ports:
       - 5000:5000
     volumes:

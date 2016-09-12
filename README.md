@@ -1,4 +1,4 @@
-[![Docker Hub Automated Build](http://container.checkforupdates.com/badges/bitnami/express)](https://hub.docker.com/r/bitnami/express/)
+
 
 # Microsoft ASP.Net development using Bitnami Docker Images
 
@@ -6,7 +6,7 @@ We increasingly see developers adopting two strategies for development. Using a 
 
 If you’ve never tried to start a project with containers before, or you have tried it and found the advice, tools, and documentation to be chaotic, out of date, or wrong, then this tutorial may be for you.
 
-In this tutorial we walk you through using the Bitnami docker images during the development lifecycle of a Microsoft.Net Application.
+In this tutorial we walk you through using the Bitnami docker images during the development lifecycle of a Microsoft.Net Core Application.
 
 # Why Docker?
 
@@ -40,24 +40,32 @@ We also assume that you have some beginner-level experience using these tools.
 >
 > If your host OS is Linux you may skip setting up Docker Machine since you'll be able to launch the containers directly in the host OS environment.
 
-Further, we also assume that your application will be using a database. In fact, we assume that it will be using MongoDB. Of course, for a real project you may be using a different database, or, in fact, no database. But, this is a common set up and will help you learn the development approach.
+## Download the Bitnami Orchestration File for Microsoft ASP.Net Core development
 
-## Download the Bitnami Orchestration File for Express development
-
-We assume that you're starting the development of the [Express](http://expressjs.com/) application from scratch. So lets begin by creating a directory for the application source where we'll be bootstrapping an Express application:
+If you have an existing ASP.Net Core application, you will be able to use it with this container, otherwise we will `git clone` a sample project to get things running.
+Let's start things off by creating a new directory for you container and application:
 
 ```bash
 $ mkdir ~/workdir/myapp
 $ cd ~/workdir/myapp
 ```
 
-Next, download our Docker Compose orchestration file for Express development:
+If you have an existing ASP.Net application, you have 2 options to use this. First, from with your new `myapp` directory, make a copy or `clone` into a new directory `dotnetapp`. e.g:
 
 ```bash
-$ curl -L "https://raw.githubusercontent.com/bitnami/bitnami-docker-express/master/docker-compose.yml" > docker-compose.yml
+$ git clone someGitRepo dotnetapp
 ```
 
-> We encourage you to take a look at the contents of the orchestration file to get an idea of the services that will be started for Express development.
+We will cover the second option in just a moment.
+
+If you do not have a existing application, or do not copy anything to the `dotnetapp` folder a [sample application](https://github.com/capescuba/dotnet-sample-proj.git) will be cloned for you as part of the composition file execution.
+You should feel free to fork from this repo as a starting point for your own project.
+
+Next, download our Docker Compose orchestration file for Microsoft ASP.Net Core:
+
+```bash
+$ curl -L "https://raw.githubusercontent.com/capescuba/dotnet-dev-container/master/docker-compose.yml" > docker-compose.yml
+```
 
 ## Run
 
@@ -67,106 +75,66 @@ Lets put the orchestration file to the test:
 $ docker-compose up
 ```
 
-This command reads the contents of the orchestration file and begins downloading the Docker images required to launch each of the services listed therein. Depending on the network speeds this can take anywhere from a few seconds to a couple minutes.
+This command reads the contents of the orchestration file and begins downloading the Docker images required to launch the service listed therein. Depending on the network speeds this can take anywhere from a few seconds to a couple minutes.
 
-After the images have been downloaded, each of the services listed in the orchestration file is started, which in this case are the `mongodb` and `myapp` services.
+After the images have been downloaded, the service listed in the orchestration file is started, which in this case is the  `dotnetapp` service.
 
-As mentioned earlier, the `mongodb` service provides a database backend which can be used for the development of a data-driven Express application. The service is setup using the [bitnami/mongodb](https://github.com/bitnami/bitnami-docker-mongodb) docker image and is configured with the [default credentials](https://github.com/bitnami/bitnami-docker-mongodb#setting-the-root-password-on-first-run).
-
-The second service thats started is named `myapp` and uses the Bitnami Express development image. The service mounts the current working directory (`~/workdir/myapp`) at the `/app` location in the container and provides all the necessary infrastucture to get you started developing a data-driven Express application.
-
-Once the Node HTTP server has been started, visit port `3000` of the Docker Machine in your favourite web browser and you'll be greeted by the Express welcome page.
-
-Lets inspect the contents of the `~/workdir/myapp` directory:
-
-```bash
-~/workdir/myapp # ls
-app.js  config              node_modules  public  views
-bin     docker-compose.yml  package.json  routes
-```
-
-You can see that we have a new Express application bootstrapped in the `~/workdir/myapp` directory of the host and is being served by the Node HTTP server running inside the Bitnami Express development container.
+Once the Microsoft ASP.Net server has been started, visit port `5000` of the Docker Machine, or use `localhost:5000` in your favourite web browser and you'll be greeted by either by your code in the `dotnetapp` directory or the sample code will cloned for you.
 
 Since the application source resides on the host, you can use your favourite IDE for developing the application. Only the execution of the application occurs inside the isolated container environment.
 
-That’s all there is to it. Without actually installing a single Express component on the host you have a completely isolated and highly reproducible Express development environment which can be shared with the rest of the team to get them started building the next big feature without worrying about the plumbing involved in setting up the development environment. Let Bitnami do that for you.
+That’s all there is to it. Without actually installing a single Microsoft ASP.Net Core component on the host you have a completely isolated and highly reproducible Microsoft ASP.Net Core development environment which can be shared with the rest of the team to get them started building the next big feature without worrying about the plumbing involved in setting up the development environment. Let Bitnami do that for you.
 
-In the next sections we take a look at some of the common tasks that are involved during the development of an Express application and how we go about executing those tasks.
 
-## Executing commands
+As mentioned earlier a second way to use your existing ASP.Net code is available by editing the docker composition file. Open the `docker-compose.yml` file:
 
-You may recall that we've not installed a single Node.js or Express component on the host and that the entire development environment is running inside the `myapp` service container. This means that if we wanted to execute [NPM](https://www.npmjs.com/) or any other Node command, we'd have to execute it inside the container.
+```
+version: '2'
 
-This may sound like a complex task to achieve. But don't worry, Docker Compose makes it very simple to execute tasks inside a service container using the `exec` command. The general form of the command looks something like the following:
-
-```bash
-$ docker-compose exec <service> <command>
+services:
+  dotnetapp:
+    image: capescuba/dotnet:v1.0.0
+    ports:
+      - 5000:5000
+    volumes:
+      - ./dotnetapp:/dotnetapp
+```
+ 
+To map your current project to the docker image simply edit the `volumes:` entry to point to your local folder, e.g.:
+```
+    volumes:
+      - ./mycode/myAspDotNetApp:/dotnetapp
 ```
 
-This instructs Docker Compose to execute the command specified by `<command>` inside the service container specified by `<service>`. The return value of the `docker-compose` command will reflect that of the specified command.
 
-With this information lets load the Node.js REPL in the `myapp` container:
+===============================================================================
 
-```bash
-$ docker-compose exec myapp node
+## TODO:
+
+This is still very much a work in progress example and lacks a few things to make life a little easier as follows:
+
+* Running the ASP.Net Server in the background
+After running `docker-compose up` from your terminal, the shell is locked running the server. Some time needs to be spend looking into making the server run in the background. Simply adding `&` to the end of the command does not work.
+This means that after any code changes you must stop and restart the container.
+* Adding and example Database
+The current code does not show how to use a Database as another service into docker via the composition file, however, it should be relatively painless to add in a new service something like:
+```
+version: '2'
+
+services:
+   mongodb:
+    image: bitnami/mongodb:3.2.7-r2
+  
+  dotnetapp:
+    image: capescuba/dotnet:v1.0.0
+    environment:
+      - CONNECTION_STRING=mongodb://mongodb:27017/my_app_development
+    depends_on:
+      - mongodb
+    ports:
+      - 5000:5000
+    volumes:
+      - ./dotnetapp:/dotnetapp
 ```
 
-To list all the NPM modules currently installed:
-
-```bash
-$ docker-compose exec myapp npm ls
-```
-
-How about installing the [Bootstramp](https://www.npmjs.com/package/bootstrap) NPM module:
-
-```bash
-$ docker-compose exec myapp npm install bootstrap --save
-```
-
-To inspect that the module was installed:
-
-```bash
-$ docker-compose exec myapp npm ls bootstrap
-```
-
-You get the idea..
-
-With the bootstrap NPM module installed, lets modify our Express application and use it to change the look and feel of the UI.
-
-Add a static route for serving the Bootstrap CSS by appending the following after the line `app.use(express.static(path.join(__dirname, 'public')));` in `app.js`.
-
-```javascript
-app.use('/stylesheets', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
-```
-
-Next in `views/layout.jade`, import the `bootstrap.min.css` style sheet by appending the following at the same indentation level after the line `link(rel='stylesheet', href='/stylesheets/style.css')` and at the same indentation level.
-
-```jade
-link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
-```
-
-Lastly, modify `views/index.jade` of our application to use the Bootstrap classes so that it looks like:
-
-```jade
-extends layout
-
-block content
-  .container
-    .jumbotron
-      h1= title
-      p My awesome #{title} website using Bootstrap CSS
-```
-
-The Node server should be restarted for the changes to take effect:
-
-```bash
-$ docker-compose restart myapp
-```
-
-Thats it! refresh your browser window and you'll see that the changes have taken effect.
-
-## Connecting to Database
-
-Express by default does not require a database connection to work but we provide a running and configured MongoDB service and an example file `config/mongodb.js` with some insights for how to connect to it.
-
-You can use [Mongoose](http://mongoosejs.com/) ODM in your application to model your application data.
+Here, as an example, we have added a Mongo Database as a service that can be referenced by the `CONNECTION_STRING` environment variable in the `dotnetapp` service

@@ -15,14 +15,17 @@ ENV STACKSMITH_STACK_ID="6ea9876" \
 
 ## STACKSMITH-END: Modifications below this line will be unchanged when regenerating
 
-## Add the dotnet core
+##Add the dotnet core
 FROM microsoft/dotnet
 
+#Copy local files
 COPY . /dotnetapp
 WORKDIR /dotnetapp
 
+#copy and set the entrypoint
 COPY ./dotnet-entrypoint.sh /
 ENTRYPOINT ["/dotnet-entrypoint.sh"]
 
+#Expose port 5000 and set env variables for the ASP.Net Core Server
 EXPOSE 5000/tcp
 ENV ASPNETCORE_URLS http://*:5000
