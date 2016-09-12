@@ -6,7 +6,7 @@ We increasingly see developers adopting two strategies for development. Using a 
 
 If you’ve never tried to start a project with containers before, or you have tried it and found the advice, tools, and documentation to be chaotic, out of date, or wrong, then this tutorial may be for you.
 
-In this tutorial we walk you through using the Bitnami docker images during the development lifecycle of a Microsoft.Net Core Application.
+In this tutorial we walk you through using the Bitnami docker images during the development lifecycle of a Microsoft ASP.Net Core Application.
 
 # Why Docker?
 
@@ -106,6 +106,10 @@ To map your current project to the docker image simply edit the `volumes:` entry
       - ./mycode/myAspDotNetApp:/dotnetapp
 ```
 
+
+## Have at it:
+Now your environment is ready to go, fire up your favourite code editor and have some fun. If you are new to Microsoft .Net, or want to find more information on using the open source / core features
+[check out the documentation here.](https://docs.microsoft.com/en-us/dotnet/index)
 
 ===============================================================================
 
